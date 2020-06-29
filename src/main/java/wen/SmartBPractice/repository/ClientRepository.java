@@ -1,8 +1,8 @@
 package wen.SmartBPractice.repository;
 
-import wen.SmartBPractice.model.Client;
 import org.springframework.data.repository.CrudRepository;
+import wen.SmartBPractice.model.Client;
 
 public interface ClientRepository extends CrudRepository<Client, Long> {
-    Client findByAddress(String address);
+
 }

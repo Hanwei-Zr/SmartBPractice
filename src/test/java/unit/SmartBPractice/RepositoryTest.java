@@ -10,7 +10,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import unit.SmartBPractice.config.DaoConfig;
 import wen.SmartBPractice.model.Client;
+import wen.SmartBPractice.model.Company;
 import wen.SmartBPractice.repository.ClientRepository;
+import wen.SmartBPractice.repository.CompanyRepository;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,23 +25,51 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RepositoryTest {
     @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
     private ClientRepository clientRepository;
 
     @Before
     public void init(){
-        Client c = Client.builder().name("CHT")
+        Company c = Company.builder().name("CHT")
                 .address("台北市").create_by("wen")
                 .build();
 
-        clientRepository.save(c);
-        log.info("Client: {}", c);
+        companyRepository.save(c);
+        log.info("Company: {}", c);
     }
 
     @Test
     public void whenFindByAddress() {
-        Client findC = clientRepository.findByAddress("台北市");
-        log.info("Client: {}", findC);
-        assertEquals("wen", findC.getCreate_by());
+        Company findC = companyRepository.findByAddress("台北市");
+        log.info("find Address: {}", findC);
+        //assertEquals("wen", findC.getCreate_by());
+
+        companyRepository.delete(findC);
+
+        Company c = Company.builder().name("ZZZHAS")
+                .address("台北新北EEE").create_by("WW")
+                .build();
+
+        companyRepository.save(c);
+
+        List<Company> list = companyRepository.findAll();
+        log.info("List All Company: {}", list);
+
     }
 
+    @Test
+    public void whenCreateClient() {
+        Client c = Client.builder()
+                .company_id("12341213")
+                .name("wenwen")
+                .email("wen81324@gmail")
+                .phone("1234556789")
+                .create_by("wen")
+                .build();
+
+        clientRepository.save(c);
+        log.info("Create Client: {}", c);
+    }
 }

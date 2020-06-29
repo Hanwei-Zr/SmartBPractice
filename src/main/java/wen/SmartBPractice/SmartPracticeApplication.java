@@ -1,28 +1,21 @@
 package wen.SmartBPractice;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import wen.SmartBPractice.model.Client;
-import wen.SmartBPractice.repository.ClientRepository;
 
 @SpringBootApplication
-@EnableJpaRepositories
-@Slf4j
+//@EnableJpaRepositories
+//@Slf4j
 //public class SmartPracticeApplication {
-public class SmartPracticeApplication implements ApplicationRunner {
+public class SmartPracticeApplication {//implements ApplicationRunner {
 
-	@Autowired
-	ClientRepository cr;
+//	@Autowired
+//	ClientRepository cr;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmartPracticeApplication.class, args);
 	}
-
+/*
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		initClient();
@@ -37,5 +30,5 @@ public class SmartPracticeApplication implements ApplicationRunner {
 
 		log.info("Client: {}", c);
 	}
-
+*/
 }
