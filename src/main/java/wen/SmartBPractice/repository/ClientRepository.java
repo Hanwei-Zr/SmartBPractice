@@ -1,8 +1,7 @@
 package wen.SmartBPractice.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import wen.SmartBPractice.model.Client;
 
-public interface ClientRepository extends CrudRepository<Client, Long> {
-
+public interface ClientRepository extends JpaRepository<Client, Long> {
 }

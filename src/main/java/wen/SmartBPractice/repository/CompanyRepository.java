@@ -1,11 +1,11 @@
 package wen.SmartBPractice.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import wen.SmartBPractice.model.Company;
-import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-
-public interface CompanyRepository extends CrudRepository<Company, Long> {
+@Repository
+public interface CompanyRepository extends JpaRepository<Company, Long> {
     Company findByAddress(String address);
-    List<Company> findAll();
+    //List<Company> findAll();
 }

@@ -1,46 +1,41 @@
 package wen.SmartBPractice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import wen.SmartBPractice.form.ClientForm;
-import wen.SmartBPractice.form.CompanyForm;
-import wen.SmartBPractice.service.ClientCrudService;
+import wen.SmartBPractice.model.Client;
+import wen.SmartBPractice.service.ClientService;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/client")
 public class ClientController {
 
     @Autowired
-    ClientCrudService clientCrudService;
+    ClientService clientService;
 
-    @GetMapping("/admin/hello")
-    public Map<String, String> adminSayHello() {
-
-        Map<String, String> map = new HashMap<>();
-        map.put("message", "admin say hello");
-
-        return map;
+    @GetMapping("/view")
+    public Page<Client> getAllClient (Pageable pageable) {
+        return clientService.doGetAll(pageable);
     }
 
     @RequestMapping("/create")
-    public Map<String, String> createCompany(@Valid @RequestBody ClientForm clientForm) {
-        Map<String, String> map = new HashMap<>();
+    public Client createClient(@Valid @RequestBody ClientForm clientForm) {
+        return clientService.doCreate(clientForm);
+    }
 
-        String company_id = clientForm.getCompany_id();
-        String name       = clientForm.getName();
-        String email      = clientForm.getEmail();
-        String phone      = clientForm.getPhone();
 
-        clientCrudService.doCreate(company_id, name, email, phone);
+    @RequestMapping("/modify/{id}")
+    public Client updateCompany (@PathVariable Long id, @Valid @RequestBody ClientForm clientForm) {
+        return clientService.doUpdate(id, clientForm);
+    }
 
-        map.put("message", "Create Success !!");
-        return map;
+    @RequestMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCompany (@PathVariable Long id) {
+        return clientService.doDelete(id);
     }
 }

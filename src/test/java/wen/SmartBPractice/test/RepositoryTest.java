@@ -1,4 +1,4 @@
-package unit.SmartBPractice;
+package wen.SmartBPractice.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import unit.SmartBPractice.config.DaoConfig;
+import wen.SmartBPractice.config.DaoConfig;
 import wen.SmartBPractice.model.Client;
 import wen.SmartBPractice.model.Company;
 import wen.SmartBPractice.repository.ClientRepository;
@@ -62,7 +62,7 @@ public class RepositoryTest {
     @Test
     public void whenCreateClient() {
         Client c = Client.builder()
-                .company_id("12341213")
+                //.company_id("12341213")
                 .name("wenwen")
                 .email("wen81324@gmail")
                 .phone("1234556789")

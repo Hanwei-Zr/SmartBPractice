@@ -1,6 +1,5 @@
 package wen.SmartBPractice.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import wen.SmartBPractice.util.Util;

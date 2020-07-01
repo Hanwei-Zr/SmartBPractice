@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,8 +17,10 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Company")
 public class Company implements Serializable {
     @Id
+    @Column(name="comapny_id")
     @GeneratedValue
     private Long id;
 

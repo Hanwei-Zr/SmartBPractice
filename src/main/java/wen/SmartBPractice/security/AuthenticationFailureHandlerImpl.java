@@ -1,6 +1,5 @@
 package wen.SmartBPractice.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import wen.SmartBPractice.util.Util;
