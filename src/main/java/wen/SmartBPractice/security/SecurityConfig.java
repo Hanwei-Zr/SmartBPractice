@@ -41,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/api/company/create", "/api/company/view", "/api/client/create", "/api/client/view").hasRole("USER")
                 .antMatchers("/api/company/modify/**", "/api/company/view", "/api/company/delete/**", "/api/client/modify/**", "/api/client/view", "/api/client/delete/**").hasRole("MANAGER")
-                .antMatchers("/api/company/**", "/api/client/**").hasRole("ADMIN")
+                .antMatchers("/api/company/create", "/api/company/view", "/api/company/delete/**", "/api/company/modify/**"
+                                        , "/api/client/create", "/api/client/view", "/api/client/delete/**", "/api/client/modify/**").hasRole("ADMIN")
 
                 .and()
                 .logout()

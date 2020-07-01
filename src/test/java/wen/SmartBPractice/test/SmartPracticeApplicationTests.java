@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +33,7 @@ public class SmartPracticeApplicationTests {
 	private MockMvc mockMvc;
 
 	private HttpHeaders httpHeaders;
+	private MockHttpSession session;
 
 	@Autowired
 	CompanyRepository companyRepository;
@@ -48,6 +50,8 @@ public class SmartPracticeApplicationTests {
 		httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type", "application/json");
 
+		session = new MockHttpSession();
+
 		JSONObject request = new JSONObject();
 		request.put("account", "admin");
 		request.put("password", "admin");
@@ -56,6 +60,7 @@ public class SmartPracticeApplicationTests {
 				MockMvcRequestBuilders
 						.post("/api/login")
 						.headers(httpHeaders)
+						.session(session)
 						.content(request.toString());
 
 		mockMvc.perform(requestBuilder)
@@ -99,6 +104,7 @@ public class SmartPracticeApplicationTests {
 				MockMvcRequestBuilders
 						.post("/api/company/create")
 						.headers(httpHeaders)
+						.session(session)
 						.content(request.toString());
 
 		mockMvc.perform(requestBuilder)
@@ -119,6 +125,7 @@ public class SmartPracticeApplicationTests {
 		RequestBuilder requestBuilder =
 				MockMvcRequestBuilders
 						.get("/api/company/view")
+						.session(session)
 						.headers(httpHeaders);
 
 		mockMvc.perform(requestBuilder)
@@ -141,6 +148,7 @@ public class SmartPracticeApplicationTests {
 				MockMvcRequestBuilders
 						.post("/api/company/modify/4")
 						.headers(httpHeaders)
+						.session(session)
 						.content(request.toString());
 
 		mockMvc.perform(requestBuilder)
@@ -161,6 +169,7 @@ public class SmartPracticeApplicationTests {
 		RequestBuilder requestBuilder =
 				MockMvcRequestBuilders
 						.get("/api/company/delete/1")
+						.session(session)
 						.headers(httpHeaders);
 
 		mockMvc.perform(requestBuilder);
