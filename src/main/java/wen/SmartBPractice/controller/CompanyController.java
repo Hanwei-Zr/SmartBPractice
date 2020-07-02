@@ -1,13 +1,17 @@
 package wen.SmartBPractice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wen.SmartBPractice.form.CompanyForm;
 import wen.SmartBPractice.model.Company;
 import wen.SmartBPractice.service.CompanyService;
+import wen.SmartBPractice.util.NotFoundException;
+import wen.SmartBPractice.util.Util;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -41,7 +45,12 @@ public class CompanyController {
     }
 
     @RequestMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCompany (@PathVariable Long id) {
+    public ResponseEntity deleteCompany (@PathVariable Long id) {
         return companyService.doDelete(id);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public String handleException(NotFoundException ex) throws JsonProcessingException {
+        return Util.mapToJsonString("message", ex.getMessage());
     }
 }

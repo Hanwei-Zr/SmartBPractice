@@ -8,11 +8,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import wen.SmartBPractice.form.CompanyForm;
 import wen.SmartBPractice.model.Company;
 import wen.SmartBPractice.repository.CompanyRepository;
 import wen.SmartBPractice.util.NotFoundException;
 
+@Transactional
 @Service
 public class CompanyService {
 
@@ -39,7 +41,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public ResponseEntity<?> doDelete (Long id) {
+    public ResponseEntity doDelete (Long id) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("CompanyId " + id + " not found"));
         companyRepository.delete(company);
@@ -51,4 +53,5 @@ public class CompanyService {
         Authentication auth = context.getAuthentication();
         return auth.getName();
     }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import wen.SmartBPractice.form.ClientForm;
 import wen.SmartBPractice.model.Client;
 import wen.SmartBPractice.model.Company;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Transactional
 public class ClientService {
 
     @Autowired
