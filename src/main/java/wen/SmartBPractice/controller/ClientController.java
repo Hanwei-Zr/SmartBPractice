@@ -13,6 +13,7 @@ import wen.SmartBPractice.util.NotFoundException;
 import wen.SmartBPractice.util.Util;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/client")
@@ -29,6 +30,11 @@ public class ClientController {
     @RequestMapping("/create")
     public Client createClient(@Valid @RequestBody ClientForm clientForm) {
         return clientService.doCreate(clientForm);
+    }
+
+    @RequestMapping("/create/muti")
+    public List<Client> createMutiClient(@Valid @RequestBody List<ClientForm> clientFormList) {
+        return clientService.doMutiCreate(clientFormList);
     }
 
 

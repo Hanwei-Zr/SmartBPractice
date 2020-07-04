@@ -39,10 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAt(loginAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
 
-                .antMatchers("/api/company/create", "/api/company/view", "/api/client/create", "/api/client/view").hasRole("USER")
-                .antMatchers("/api/company/modify/**", "/api/company/view", "/api/company/delete/**", "/api/client/modify/**", "/api/client/view", "/api/client/delete/**").hasRole("MANAGER")
-                .antMatchers("/api/company/create", "/api/company/view", "/api/company/delete/**", "/api/company/modify/**"
-                                        , "/api/client/create", "/api/client/view", "/api/client/delete/**", "/api/client/modify/**").hasRole("ADMIN")
+                .antMatchers("/api/company/create/**",   "/api/client/create/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/company/modify/**",  "/api/client/modify/**").hasAnyRole("MANAGER", "ADMIN")
+                .antMatchers("/api/company/view",       "/api/client/view").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .antMatchers("/api/company/delete/**",  "/api/client/delete/**").hasAnyRole("MANAGER", "ADMIN")
 
                 .and()
                 .logout()

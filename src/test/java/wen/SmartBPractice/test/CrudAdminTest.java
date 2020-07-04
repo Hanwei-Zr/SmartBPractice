@@ -19,6 +19,9 @@ import wen.SmartBPractice.model.Company;
 import wen.SmartBPractice.repository.ClientRepository;
 import wen.SmartBPractice.repository.CompanyRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SmartPracticeApplicationTests {
+public class CrudAdminTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -46,7 +49,10 @@ public class SmartPracticeApplicationTests {
 		companyRepository.save(c);
 	}
 
-	private void createClient(Company company, String name, String email, String phone) {
+	private void createClient(String name, String email, String phone) {
+		createCompany("testInClient", "Taiwan");
+		Company company = companyRepository.findTopByOrderById();
+
 		Client c = new Client();
 		c.setCompany(company);
 		c.setEmail(email);
@@ -173,30 +179,31 @@ public class SmartPracticeApplicationTests {
 	@Test(expected = RuntimeException.class)
 	public void testCompanyDelete() throws Exception {
 		createCompany("CHT", "Taiwan");
-
+		long id = companyRepository.findTopByOrderById().getId();
 		httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type", "application/json");
 
 		RequestBuilder requestBuilder =
 				MockMvcRequestBuilders
-						.get("/api/company/delete/1")
+						.get("/api/company/delete/" + id)
 						.session(session)
 						.headers(httpHeaders);
 
 		mockMvc.perform(requestBuilder);
-		companyRepository.findById(Long.parseLong("1"))
+		companyRepository.findById(id)
 				.orElseThrow(RuntimeException::new);
 	}
 
 	@Test
 	public void testClientCreate() throws Exception {
 		createCompany("DAS", "JP");
+		long id = companyRepository.findTopByOrderById().getId();
 
 		httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type", "application/json");
 
 		JSONObject request = new JSONObject();
-		request.put("company_id", "5");
+		request.put("company_id", id);
 		request.put("name", "wen");
 		request.put("email", "wen@das.co");
 		request.put("phone", "0987654321");
@@ -219,10 +226,7 @@ public class SmartPracticeApplicationTests {
 
 	@Test
 	public void testClientView() throws Exception {
-		createCompany("CHT", "Taiwan");
-
-		Company c = companyRepository.findTopByOrderById();
-		createClient(c, "wen", "testView", "1234567890");
+		createClient("TestView", "testView", "1234567890");
 
 		httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type", "application/json");
@@ -238,48 +242,99 @@ public class SmartPracticeApplicationTests {
 				.andExpect(status().isOk());
 	}
 
-//	@Test
-//	public void testCompanyModify() throws Exception {
-//		createCompany("CHT", "Taiwan");
-//
-//		httpHeaders = new HttpHeaders();
-//		httpHeaders.add("Content-Type", "application/json");
-//
-//		JSONObject request = new JSONObject();
-//		request.put("name", "Modify");
-//		request.put("address", "TaiwanC");
-//
-//		RequestBuilder requestBuilder =
-//				MockMvcRequestBuilders
-//						.post("/api/company/modify/4")
-//						.headers(httpHeaders)
-//						.session(session)
-//						.content(request.toString());
-//
-//		mockMvc.perform(requestBuilder)
-////				.andDo(print())
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("id").hasJsonPath())
-//				.andExpect(jsonPath("name").value("Modify"))
-//				.andExpect(jsonPath("address").value("TaiwanC"));
-//	}
-//
-//	@Test(expected = RuntimeException.class)
-//	public void testCompanyDelete() throws Exception {
-//		createCompany("CHT", "Taiwan");
-//
-//		httpHeaders = new HttpHeaders();
-//		httpHeaders.add("Content-Type", "application/json");
-//
-//		RequestBuilder requestBuilder =
-//				MockMvcRequestBuilders
-//						.get("/api/company/delete/1")
-//						.session(session)
-//						.headers(httpHeaders);
-//
-//		mockMvc.perform(requestBuilder);
-//		companyRepository.findById(Long.parseLong("1"))
-//				.orElseThrow(RuntimeException::new);
-//	}
+	@Test
+	public void testClientModify() throws Exception {
+		createClient("testModify", "wen@gmail.com", "1234567890");
+
+		Client c  = clientRepository.findTopByOrderById();
+		long id = c.getId();
+		long company_id = c.getCompany().getId();
+
+		httpHeaders = new HttpHeaders();
+		httpHeaders.add("Content-Type", "application/json");
+
+		JSONObject request = new JSONObject();
+		request.put("name", "AfterModify");
+		request.put("email", "weee@c");
+		request.put("phone", "1234567890");
+		request.put("company_id", company_id);
+
+		RequestBuilder requestBuilder =
+				MockMvcRequestBuilders
+						.post("/api/client/modify/" + id)
+						.headers(httpHeaders)
+						.session(session)
+						.content(request.toString());
+
+		mockMvc.perform(requestBuilder)
+//				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("name").value("AfterModify"));
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testClientDelete() throws Exception {
+		createClient("testDel", "wen@gmail.com", "1234567890");
+
+		long id = clientRepository.findTopByOrderById().getId();
+
+		httpHeaders = new HttpHeaders();
+		httpHeaders.add("Content-Type", "application/json");
+
+		RequestBuilder requestBuilder =
+				MockMvcRequestBuilders
+						.get("/api/client/delete/" + id)
+						.session(session)
+						.headers(httpHeaders);
+
+		mockMvc.perform(requestBuilder);
+		clientRepository.findById(id)
+				.orElseThrow(RuntimeException::new);
+	}
+
+	@Test
+	public void testMutiClientCreate() throws Exception {
+		createCompany("DAS", "JP");
+		long id = companyRepository.findTopByOrderById().getId();
+
+		httpHeaders = new HttpHeaders();
+		httpHeaders.add("Content-Type", "application/json");
+
+		List<JSONObject> requestList = new ArrayList<>();
+
+		JSONObject request1 = new JSONObject();
+		request1.put("company_id", id);
+		request1.put("name", "wen");
+		request1.put("email", "wen@das.co");
+		request1.put("phone", "0987654321");
+
+		requestList.add(request1);
+
+		JSONObject request2 = new JSONObject();
+		request2.put("company_id", id);
+		request2.put("name", "testest");
+		request2.put("email", "wen@222das.co");
+		request2.put("phone", "098337654321");
+
+		requestList.add(request2);
+
+		RequestBuilder requestBuilder =
+				MockMvcRequestBuilders
+						.post("/api/client/create/muti")
+						.headers(httpHeaders)
+						.session(session)
+						.content(requestList.toString());
+
+		mockMvc.perform(requestBuilder)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id").exists())
+				.andExpect(jsonPath("$[0].name").value("wen"))
+				.andExpect(jsonPath("$[0].email").value("wen@das.co"))
+				.andExpect(jsonPath("$[0].phone").value("0987654321"))
+				.andExpect(jsonPath("$[1].name").value("testest"))
+				.andExpect(jsonPath("$[1].email").value("wen@222das.co"))
+				.andExpect(jsonPath("$[1].phone").value("098337654321"));
+	}
 
 }

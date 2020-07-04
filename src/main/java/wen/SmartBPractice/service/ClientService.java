@@ -18,6 +18,8 @@ import wen.SmartBPractice.repository.ClientRepository;
 import wen.SmartBPractice.repository.CompanyRepository;
 import wen.SmartBPractice.util.NotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,7 +41,7 @@ public class ClientService {
         return clientRepository.findAll(pageable);
     }
 
-    public Client doCreate (ClientForm clientForm) {
+    public Client findCompanyBuildClient(ClientForm clientForm) {
         Long findId = Long.parseLong(clientForm.getCompany_id());
         Optional<Company> companyOpt = companyRepository.findById(findId);
         Company company = companyOpt.orElseThrow(() ->
@@ -51,7 +53,23 @@ public class ClientService {
                 .phone(clientForm.getPhone())
                 .create_by(getAuthName())
                 .build();
-        return clientRepository.save(client);
+        return client;
+    }
+
+    public Client doCreate (ClientForm clientForm) {
+        Client c = findCompanyBuildClient(clientForm);
+        return clientRepository.save(c);
+    }
+
+    public List<Client> doMutiCreate(List<ClientForm> clientFormList) {
+        List<Client> clients = new ArrayList<>();
+
+        clientFormList.stream().forEach( client -> {
+            Client c = findCompanyBuildClient(client);
+            clientRepository.save(c);
+            clients.add(c);
+        });
+        return clients;
     }
 
     public Client doUpdate (Long id, ClientForm clientForm) {
