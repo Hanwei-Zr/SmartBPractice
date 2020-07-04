@@ -1,5 +1,7 @@
 package wen.SmartBPractice.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Client")
+@ApiModel(description = "Client Model")
 public class Client implements Serializable {
     @Id
     @GeneratedValue
@@ -30,6 +33,7 @@ public class Client implements Serializable {
     private Company company;
 
     @Column
+    @ApiModelProperty(value = "Name", required = true)
     private String name;
 
     @Column

@@ -61,7 +61,7 @@ public class ClientService {
         return clientRepository.save(c);
     }
 
-    public List<Client> doMutiCreate(List<ClientForm> clientFormList) {
+    public List<Client> doMultiCreate(List<ClientForm> clientFormList) {
         List<Client> clients = new ArrayList<>();
 
         clientFormList.stream().forEach( client -> {

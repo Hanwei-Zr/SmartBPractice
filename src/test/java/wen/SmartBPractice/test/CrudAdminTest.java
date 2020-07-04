@@ -320,7 +320,7 @@ public class CrudAdminTest {
 
 		RequestBuilder requestBuilder =
 				MockMvcRequestBuilders
-						.post("/api/client/create/muti")
+						.post("/api/client/create/multi")
 						.headers(httpHeaders)
 						.session(session)
 						.content(requestList.toString());
