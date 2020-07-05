@@ -15,10 +15,11 @@ http://smartbeeexam-env.eba-9pmxwptw.ap-east-1.elasticbeanstalk.com/
 
 Use the following three permissions to control and meet the document requirements 
 
-- account `admin`  , password `admin`   代表 super user
-- account `manager`, password `manager` 代表 manager 
-- account `user`   , password `user`    代表 operator
+- account `admin`   represents super user
+- account `manager` represents manager 
+- account `user`    represents operator
 
+password is same as account.
 ## Swagger Api Doc
 
 Please refer to the following
